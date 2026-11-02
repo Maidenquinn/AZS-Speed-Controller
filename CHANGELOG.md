@@ -8,6 +8,12 @@
 - Maintainer confirmed run-timer acceleration beyond ×5 on the current 0.139 client.
 - Classic QPC/GetTickCount hooks remain; UI version label set to v1.3.2.
 
+## 1.3.1 — Chrono fix for 0.127.0 (2026-10-29)
+
+- Scale the local simulation wait with the selected speed on a pinned 0.127.0 EXE.
+- Overlay status for chrono armed / call observed / unavailable.
+- Superseded for newer clients by 1.3.2 signature scanning.
+
 ## Unreleased — GitHub preparation after v1.3.0-rc1 Windows test
 
 - Preserve saved shortcut assignments when registration fails.
