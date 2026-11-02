@@ -1,13 +1,12 @@
-# Changelog
+## 1.3.2 — Chrono signature scan for 0.139+ (2026-11-02)
 
-## 1.3.1 — 2026-10-29
-
-- Fix the game timer plateau above approximately ×4 by scaling the local simulation thread's 25 ms wait. The maintainer confirmed the preview works through ×25 on the supplied Azeroth Survivors 0.127.0 Windows executable.
-- Enable the targeted hook only after full EXE SHA-256, PE metadata and in-memory instruction checks. Unrecognized builds retain classic clock hooks and explicitly show that the chrono fix is unavailable.
-- Show whether the chrono hook is armed or its matching call has been observed; wait for hook initialization before reporting a connection.
-- Keep the game file on disk unchanged and leave unrelated Rust waits untouched.
-- Update visible version labels, packaging and add a timer-policy test to Windows CI. Support static MinGW cross-builds.
-- Validation: portable Windows x64 binaries cross-compiled; native timer-policy test passed; the game test was performed with the preceding preview and the release preserves its hook implementation. New MSVC CI, other-PC, coop and antivirus validation remain pending.
+- Replace the fixed 0.127.0 executable hash/PE gate with a signature scan of the
+  loaded game image: locate `xor ecx / mov edx, 25_000_000 / call` and the Rust
+  sleep prologue, then scale only that wait with the selected speed.
+- Survives Azeroth Survivors **0.139.0** and later builds that keep the same
+  simulation-wait pattern; status shows Chrono armed / call observed / unavailable.
+- Maintainer confirmed run-timer acceleration beyond ×5 on the current 0.139 client.
+- Classic QPC/GetTickCount hooks remain; UI version label set to v1.3.2.
 
 ## Unreleased — GitHub preparation after v1.3.0-rc1 Windows test
 
@@ -42,6 +41,7 @@
 - Add source audit, localization notes, and updated build/release documentation.
 - No Windows build or runtime verification performed in this environment.
 
+# Changelog
 
 ## [1.2.1] - Source candidate (unreleased)
 - Added remappable shortcuts for all supported actions, with INI persistence and collision checks.

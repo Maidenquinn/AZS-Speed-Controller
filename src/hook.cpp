@@ -22,7 +22,7 @@ struct Clock { uint64_t real = 0, virtualTime = 0; LONG speed = 100; bool initia
 static Clock qpcClock, tickClock, tick64Clock, timeClock;
 
 static LONG readSpeed() {
-  LONG value = shared ? InterlockedCompareExchange(&shared->speed100,0,0) : 100;
+  LONG value = shared ? InterlockedCompareExchange(&shared->speed100, 0, 0) : 100;
   return value >= 100 && value <= 2500 ? value : 100;
 }
 
@@ -90,6 +90,7 @@ static DWORD WINAPI init(LPVOID) {
     return 0;
   }
   // Controller connects only after all expected hooks have been enabled.
+  // 2 = chrono armed via signature scan; 1 = classic clocks only.
   InterlockedExchange(&shared->active,timerReady ? 2 : 1);
   // Keep mapping and winmm loaded while hooks are active. Windows reclaims
   // them at process exit; unhooking in DllMain during teardown is unsafe.
