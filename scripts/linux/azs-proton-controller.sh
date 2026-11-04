@@ -23,7 +23,7 @@ compat=$2
 controller=$3
 
 if [[ ! -f "$proton" ]]; then printf 'Proton script missing: %s\n' "$proton" >&2; exit 66; fi
-if [[ ! -d "$compat/pfx" ]]; then
+if [[ ! -f "$compat/pfx/system.reg" ]]; then
   printf 'Existing Wine prefix missing: %s/pfx\n' "$compat" >&2
   printf 'Refusing to create or guess a different prefix.\n' >&2
   exit 66
@@ -43,6 +43,10 @@ fi
 if [[ -z "${STEAM_COMPAT_CLIENT_INSTALL_PATH:-}" ]]; then
   printf 'Steam install path not found. Set STEAM_COMPAT_CLIENT_INSTALL_PATH.\n' >&2
   exit 66
+fi
+if [[ "${AZS_GAME_CONFIRMED:-}" != "1" ]]; then
+  printf "%s\n" "Refusing launch: confirm the base game runs and set AZS_GAME_CONFIRMED=1." >&2
+  exit 65
 fi
 export STEAM_COMPAT_DATA_PATH="$compat"
 
