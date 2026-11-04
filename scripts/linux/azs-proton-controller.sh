@@ -44,6 +44,15 @@ if [[ -z "${STEAM_COMPAT_CLIENT_INSTALL_PATH:-}" ]]; then
   printf 'Steam install path not found. Set STEAM_COMPAT_CLIENT_INSTALL_PATH.\n' >&2
   exit 66
 fi
+# Optional strict gate: game process and compatdata must match.
+if [[ "${AZS_STRICT_PREFLIGHT:-0}" == "1" ]]; then
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  if ! command -v python3 >/dev/null 2>&1; then
+    printf "%s\n" "Python 3 required for strict preflight." >&2
+    exit 69
+  fi
+  python3 "$script_dir/azs-connection-preflight.py" "$compat" || exit 65
+fi
 export STEAM_COMPAT_DATA_PATH="$compat"
 
 printf '%s\n' 'Experimental Proton launch; the controller may not connect to the game.'
