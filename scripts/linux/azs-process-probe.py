@@ -25,7 +25,7 @@ def _environment(path):
 def _matches(args):
     # Require an exact executable basename, not substring matching in arbitrary args.
     # Wine may expose the Windows exe as argv[0] or after a wine/preloader command.
-    for arg in args[:3]:
+    if not args:\n        return False\n    # A launcher argument is accepted only when argv[0] is a known Wine host.\n    # Arbitrary Python/shell launcher arguments are never trusted as game identity.\n    host = args[0].replace("\\\\", "/").rsplit("/", 1)[-1].lower()\n    scan = args[:1] if host not in {"wine", "wine64", "wine-preloader", "wine64-preloader"} else args[:2]\n    for arg in scan:
         normalized = arg.replace("\\", "/").rstrip("/").lower()
         if normalized.rsplit("/", 1)[-1] == TARGET:
             return True
