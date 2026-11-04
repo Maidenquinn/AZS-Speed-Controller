@@ -1,0 +1,33 @@
+name: Linux port checks
+on:
+  pull_request:
+    paths:
+      - 'scripts/linux/**'
+      - 'tests/linux/**'
+      - '.github/workflows/linux-port-checks.yml'
+      - 'src/timer_policy.h'
+      - 'tests/timer_policy_test.cpp'
+  push:
+    branches:
+      - 'feat/steamdeck-proton-linux-port'
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bash syntax checks
+        run: |
+          bash -n scripts/linux/azs-proton-diagnostics.sh
+          bash -n scripts/linux/azs-proton-controller.sh
+          bash -n tests/linux/smoke.sh
+      - name: Shellcheck
+        run: |
+          shellcheck scripts/linux/azs-proton-diagnostics.sh scripts/linux/azs-proton-controller.sh tests/linux/smoke.sh
+      - name: Safe smoke tests
+        run: bash tests/linux/smoke.sh
+      - name: Portable timer policy tests
+        run: |
+          g++ -std=c++17 -O2 -Wall -Wextra -I src tests/timer_policy_test.cpp -o /tmp/azs-timer-policy-test
+          /tmp/azs-timer-policy-test
