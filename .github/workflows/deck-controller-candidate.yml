@@ -1,0 +1,37 @@
+name: Steam Deck controller candidate
+on:
+  workflow_dispatch:
+  push:
+    branches: [feat/steamdeck-proton-linux-port]
+    paths:
+      - 'src/**'
+      - 'CMakeLists.txt'
+      - 'scripts/linux/**'
+      - 'docs/STEAM-DECK-TESTING.md'
+      - '.github/workflows/deck-controller-candidate.yml'
+
+jobs:
+  windows-build:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure Windows controller and hook
+        run: cmake -S . -B build -A x64
+      - name: Build Windows controller and hook
+        run: cmake --build build --config Release --parallel
+      - name: Check build outputs
+        shell: pwsh
+        run: |
+          $exe = 'build/Release/AZSSpeedController.exe'
+          $dll = 'build/Release/AZSSpeedHook.dll'
+          if (!(Test-Path $exe) -or !(Test-Path $dll)) { throw 'Missing controller or hook binary' }
+          Get-FileHash $exe -Algorithm SHA256
+          Get-FileHash $dll -Algorithm SHA256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AZS-Windows-Binaries-For-Proton-Candidate
+          path: |
+            build/Release/AZSSpeedController.exe
+            build/Release/AZSSpeedHook.dll
+          if-no-files-found: error
+          retention-days: 14
