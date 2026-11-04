@@ -22,5 +22,5 @@ No sudo, no installations, no prefix deletions.
 This package DOES NOT accelerate the game.
 EOF
 (cd "$stage" && zip -q -r "$out/AZS-Deck-Diagnostics.zip" AZS-Deck-Diagnostics)
-sha256sum "$out/AZS-Deck-Diagnostics.zip" > "$out/AZS-Deck-Diagnostics.zip.sha256"
+(cd "$out" && sha256sum AZS-Deck-Diagnostics.zip > AZS-Deck-Diagnostics.zip.sha256)
 echo "Created $out/AZS-Deck-Diagnostics.zip"
