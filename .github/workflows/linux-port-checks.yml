@@ -24,6 +24,8 @@ jobs:
           bash -n tests/linux/smoke.sh
           bash -n scripts/linux/package-deck-diagnostics.sh
           bash -n tests/linux/package_smoke.sh
+          bash -n scripts/linux/azs-wine-test.sh
+          bash -n tests/linux/wine_test_smoke.sh
           python3 -m py_compile scripts/linux/azs-runtime-discovery.py scripts/linux/azs-process-probe.py scripts/linux/azs-compat-report.py scripts/linux/azs-launch-log-summary.py scripts/linux/azs-connection-preflight.py
       - name: Shellcheck
         run: |
@@ -37,6 +39,8 @@ jobs:
           g++ -std=c++17 -O2 -Wall -Wextra -I src tests/timer_policy_test.cpp -o /tmp/azs-timer-policy-test
           /tmp/azs-timer-policy-test
 
+      - name: Wine launcher smoke
+        run: bash tests/linux/wine_test_smoke.sh
       - name: Build and verify Steam Deck diagnostic ZIP
         run: bash tests/linux/package_smoke.sh
       - name: Package Steam Deck diagnostic ZIP
