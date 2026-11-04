@@ -57,6 +57,13 @@ EOF
 chmod +x "$tmp/proton"
 STEAM_COMPAT_CLIENT_INSTALL_PATH="$tmp" bash "$launcher" "$tmp/proton" "$tmp/compat" "$tmp/AZSSpeedController.exe" >"$tmp/out" 2>"$tmp/err"
 
+# Strict preflight must reject launch if no game is detected.
+if AZS_STRICT_PREFLIGHT=1 STEAM_COMPAT_CLIENT_INSTALL_PATH="$tmp" bash "$launcher" "$tmp/proton" "$tmp/compat" "$tmp/AZSSpeedController.exe" >"$tmp/out" 2>"$tmp/err"; then
+  echo 'FAIL: strict preflight accepted missing game' >&2
+  exit 1
+fi
+grep -q 'BLOCKED: game_not_detected' "$tmp/out"
+
 # Diagnostics must run unprivileged without requiring Steam.
 bash "$diag" >"$tmp/diagnostics"
 grep -q 'No changes will be made' "$tmp/diagnostics"
