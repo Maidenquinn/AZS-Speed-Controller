@@ -22,7 +22,7 @@ jobs:
           bash -n scripts/linux/azs-proton-diagnostics.sh
           bash -n scripts/linux/azs-proton-controller.sh
           bash -n tests/linux/smoke.sh
-          python3 -m py_compile scripts/linux/azs-runtime-discovery.py scripts/linux/azs-process-probe.py scripts/linux/azs-compat-report.py scripts/linux/azs-launch-log-summary.py
+          python3 -m py_compile scripts/linux/azs-runtime-discovery.py scripts/linux/azs-process-probe.py scripts/linux/azs-compat-report.py scripts/linux/azs-launch-log-summary.py scripts/linux/azs-connection-preflight.py
       - name: Shellcheck
         run: |
           shellcheck scripts/linux/azs-proton-diagnostics.sh scripts/linux/azs-proton-controller.sh tests/linux/smoke.sh
